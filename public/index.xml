@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Nefes Atölye</title>
+		<link>http://192.168.1.112:44045/</link>
+		<description>Recent content on Nefes Atölye</description>
+		<generator>Hugo</generator>
+		<language>tr</language>
+		
+		
+		
+		
+			<atom:link href="http://192.168.1.112:44045/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Sanatsal Faaliyetler</title>
+				<link>http://192.168.1.112:44045/sanatsal-faaliyetler/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://192.168.1.112:44045/sanatsal-faaliyetler/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Sazlarımız</title>
+				<link>http://192.168.1.112:44045/sazlarimiz/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://192.168.1.112:44045/sazlarimiz/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Üretim Aşamasından</title>
+				<link>http://192.168.1.112:44045/uretim-asamasi/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://192.168.1.112:44045/uretim-asamasi/</guid>
+				<description></description>
+			</item>
+	</channel>
+</rss>

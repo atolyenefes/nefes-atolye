@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .Site.Title }}</title>
+    <style>
+        /* Kilim, talaş ve doğa tonları */
+        body {
+            background-color: #f2e6d0;
+            background-image: radial-gradient(#dbcaa5 1px, transparent 1px); 
+            background-size: 20px 20px;
+            color: #3b2f2f;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px 0;
+            overflow-x: hidden;
+        }
+
+        .site-kapsayici {
+            width: 90%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .kilim-border {
+            height: 12px;
+            background: repeating-linear-gradient(45deg, #8c2d19, #8c2d19 10px, #d97d41 10px, #d97d41 20px, #4a6b56 20px, #4a6b56 30px);
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+
+        .ust-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2%;
+        }
+
+        header h1 {
+            font-size: 3.8rem;
+            color: #8c2d19;
+            margin: 0;
+            text-shadow: 2px 2px 0px #dbcaa5;
+        }
+
+        .story-alani {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .story-baloncuk {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #fffdf9;
+            border: 3px solid #8c2d19;
+            box-shadow: 4px 4px 0px #3b2f2f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .story-baloncuk:hover { transform: scale(1.1) rotate(5deg); }
+        .story-metni { font-size: 0.75rem; font-weight: bold; color: #8c2d19; margin-top: 5px; }
+        .story-pasif { border-color: #5c4033 !important; opacity: 0.4; }
+
+        .marangoz-tezgahi {
+            background: #e3cca1;
+            border: 4px double #5c4033;
+            padding: 20px;
+            margin: 40px auto;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+            box-shadow: 8px 8px 0px #3b2f2f;
+        }
+
+        .tezgah-gorseli {
+            width: 100%;
+            display: block;
+            height: 400px;
+            object-fit: cover;
+            object-position: center;
+            border: 1px solid #5c4033;
+            box-shadow: 4px 4px 0px #8c2d19; 
+            margin-top: 15px;
+            filter: sepia(15%) grain(10%);
+        }
+
+        /* 🎻 DİJİTAL SAZ ASKILIĞI STİLLERİ */
+        .saz-askiligi {
+            background: #ebd2a9;
+            border: 3px solid #5c4033;
+            padding: 30px 20px;
+            margin: 40px auto;
+            position: relative;
+            box-shadow: 6px 6px 0px #3b2f2f;
+        }
+
+        /* Ahşap Askı Kalası */
+        .asko-kalasi {
+            height: 16px;
+            background: #8c2d19;
+            border-radius: 4px;
+            width: 95%;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 4px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Sazların Yan Yana Dizilimi */
+        .sazlar-hizasi {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin-top: -5px;
+            padding: 0 40px;
+        }
+
+        /* Tekil Saz Kutusu */
+        .asili-saz {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        /* Çivi/İp Efekti */
+        .asili-saz::before {
+            content: "📍";
+            font-size: 0.8rem;
+            position: absolute;
+            top: -12px;
+            z-index: 10;
+        }
+
+        .asili-saz:hover {
+            transform: translateY(5px) rotate(3deg);
+        }
+
+        /* Saz Boyutları (İrili Ufaklı) */
+        .saz-simge { filter: drop-shadow(3px 5px 2px rgba(0,0,0,0.25)); }
+        .boy-cura { font-size: 3rem; }
+        .boy-kisa { font-size: 4.2rem; }
+        .boy-dede { font-size: 4.5rem; }
+        .boy-uzun { font-size: 5.5rem; }
+        .boy-divan { font-size: 6.8rem; }
+
+        .saz-Isim {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #5c4033;
+            margin-top: 8px;
+            background: #fffdf9;
+            padding: 2px 6px;
+            border: 1px solid #5c4033;
+            border-radius: 3px;
+            box-shadow: 2px 2px 0px #3b2f2f;
+        }
+
+        /* 4 Unsur Akışı */
+        .Izgara-duzeni {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 40px;
+            margin: 60px auto;
+            width: 100%;
+        }
+
+        .unsur-kart {
+            background: #fffdf9;
+            border: 2px solid #5c4033;
+            padding: 30px;
+            position: relative;
+            box-shadow: 5px 5px 0px #4a6b56; 
+            transition: all 0.3s ease;
+        }
+
+        .unsur-kart:nth-child(odd) { transform: rotate(-1deg) translateY(10px); }
+        .unsur-kart:nth-child(even) { transform: rotate(1.5deg) translateY(-5px); }
+
+        .unsur-kart:hover {
+            transform: scale(1.03) rotate(0deg) !important;
+            box-shadow: 8px 8px 0px #8c2d19;
+        }
+
+        .unsur-kart h2 {
+            color: #8c2d19;
+            border-bottom: 2px dashed #4a6b56;
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+
+        /* MODAL PENCERELER */
+        .ortak-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(59, 47, 47, 0.9);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 40px 0;
+        }
+
+        .modal-icerik {
+            background-color: #f2e6d0;
+            margin: auto;
+            padding: 30px;
+            border: 5px double #8c2d19;
+            width: 85%;
+            max-width: 1200px;
+            box-shadow: 10px 10px 0px #000;
+            position: relative;
+        }
+
+        .story-medya-kapsayici { max-width: 450px; margin: 0 auto; text-align: center; }
+        .story-medya { width: 100%; max-height: 65vh; object-fit: contain; border: 3px solid #5c4033; box-shadow: 5px 5px 0px #8c2d19; }
+        .kapat-butonu { position: absolute; top: 15px; right: 25px; font-size: 2.5rem; color: #8c2d19; cursor: pointer; font-weight: bold; }
+
+        .kedi-kimlik, .saz-kimlik {
+            background: #fffdf9;
+            border: 3px double #5c4033;
+            padding: 20px;
+            box-shadow: 5px 5px 0px #8c2d19;
+        }
+        
+        .biyometrik-alan {
+            width: 100%;
+            height: 160px;
+            background: #e6d5b8;
+            border: 1px dashed #5c4033;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .kimlik-satir { font-size: 0.85rem; margin: 8px 0; border-bottom: 1px dotted #dbcaa5; padding-bottom: 4px; }
+        .kimlik-satir strong { color: #8c2d19; }
+
+        .gozcu-kedi-sol {
+            position: fixed;
+            bottom: -5px; left: 10px;
+            font-size: 4rem; transform: rotate(15deg);
+            z-index: 100; cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .gozcu-kedi-sol:hover { transform: translate(15px, -15px) rotate(0deg) scale(1.1); }
+
+        .selale-akisi { color: #4a8699; font-size: 1.2rem; animation: akis 1.5s infinite linear; display: inline-block; }
+        @keyframes akis { 0% { transform: translateY(-3px); opacity: 0.7; } 50% { opacity: 1; } 100% { transform: translateY(3px); opacity: 0.7; } }
+        .filiz { position: absolute; bottom: 5px; right: 5px; font-size: 1.2rem; animation: buyume 3s infinite ease-in-out alternate; }
+        @keyframes buyume { 0% { transform: scale(0.9) rotate(-5deg); } 100% { transform: scale(1.1) rotate(5deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="site-kapsayici">
+        <div class="kilim-border"></div>
+
+        <div class="ust-bar">
+            <header>
+                <h1>{{ .Site.Title }}</h1>
+                <p style="font-style: italic; color: #5c4033; margin-top: 5px;">Talaş kokusu, su sesi ve analog ruhun dijital günlüğü...</p>
+            </header>
+            
+            <div class="story-alani" id="storyButon" title="Atölyeden Anlık Günlük">
+                <div class="story-baloncuk" id="storyHalka">📸</div>
+                <div class="story-metni">Anlık Günlük</div>
+            </div>
+        </div>
+
+        <!-- Antika Marangoz Tezgahı -->
+        <section class="marangoz-tezgahi">
+            <span style="position: absolute; top: 10px; left: 15px; font-size: 1.5rem;">🪵</span>
+            <span style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem;">🪚</span>
+            <h2>🛠️ Antika Marangoz Tezgahı</h2>
+            <img src="/gorseller/tezgah.jpg" alt="Antika Marangoz Tezgahı" class="tezgah-gorseli" onerror="this.style.display='none';">
+        </section>
+
+        <!-- 🎻 YENİ: ATÖLYE SAZ ASKILIĞI DUVARI -->
+        <section class="saz-askiligi">
+            <h3 style="text-align: center; color: #8c2d19; font-size: 1.6rem; margin-top: 0; margin-bottom: 25px; letter-spacing: 2px;">🪵 Atölye Saz Askılığı 🎻</h3>
+            <div class="asko-kalasi"></div>
+            
+            <div class="sazlar-hizasi">
+                <!-- Saz 1: Cura -->
+                <div class="asili-saz" onclick="sazModalAc('cura')">
+                    <div class="saz-simge boy-cura">🪕</div>
+                    <div class="saz-Isim">Cura</div>
+                </div>
+                <!-- Saz 2: Kısa Sap -->
+                <div class="asili-saz" onclick="sazModalAc('kisasap')">
+                    <div class="saz-simge boy-kisa">🪕</div>
+                    <div class="saz-Isim">Kısa Sap</div>
+                </div>
+                <!-- Saz 3: Dede Sazı -->
+                <div class="asili-saz" onclick="sazModalAc('dede')">
+                    <div class="saz-simge boy-dede">🪕</div>
+                    <div class="saz-Isim">Dede Sazı</div>
+                </div>
+                <!-- Saz 4: Uzun Sap -->
+                <div class="asili-saz" onclick="sazModalAc('uzunsap')">
+                    <img src="/gorseller/uzunsap.png" class="saz-simge" style="height: 180px; object-fit: contain;">
+                    <div class="saz-Isim">Uzun Sap</div>
+                </div>
+                <!-- Saz 5: Divan -->
+                <div class="asili-saz" onclick="sazModalAc('divan')">
+                    <div class="saz-simge boy-divan">🪕</div>
+                    <div class="saz-Isim">Divan Sazı</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 Unsur Akışı -->
+        <main class="Izgara-duzeni">
+            <div class="unsur-kart">
+                <h2>🪵 Atölye</h2>
+                <p>Ahşap kokusu, yontulan ağaçlar ve talaş günlüklerinin video kayıtları.</p>
+                <span class="filiz">🌱</span>
+            </div>
+            
+            <div class="unsur-kart">
+                <h2>🎵 Stüdyo</h2>
+                <p>432 Hz frekansında etnik techno denemeleri, saz ve handpan doğaçlamaları.</p>
+                <span class="filiz">🌿</span>
+            </div>
+            
+            <div class="unsur-kart">
+                <h2>🏡 Bahçe <span class="selale-akisi">🌊</span></h2>
+                <p>Doğal taş şelalenin şırıltısı, toprakla hemhal olma ve büyüyen çiçeklerin takibi.</p>
+                <span class="filiz">🌸</span>
+            </div>
+            
+            <div class="unsur-kart">
+                <h2>🐈 Yaşam</h2>
+                <p>Atölye kedilerinin gün içindeki halleri, demlenen çaylar og samimi anlar.</p>
+                <span class="filiz">🍀</span>
+            </div>
+        </main>
+    </div>
+
+    <div class="gozcu-kedi-sol" id="kediButon" title="Gizli Kedi Günlüğünü Aç!">🐈</div>
+
+    <!-- HİKAYE (STORY) MODAL PENCERESİ -->
+    <div id="storyModal" class="ortak-modal">
+        <div class="modal-icerik" style="max-width: 550px;">
+            <span class="kapat-butonu" id="storyKapat">&times;</span>
+            <h2 style="color: #8c2d19; text-align: center; font-size: 1.8rem; margin-bottom: 15px;">⚡ Atölyeden O An...</h2>
+            <div class="story-medya-kapsayici">
+                <img src="/gorseller/gunluk.jpg" alt="Anlık Durum" class="story-medya" id="storyResimEleman">
+                <p style="font-style: italic; margin-top: 15px; color: #5c4033;" id="storyYazisi">"Nefes Atölye'de anlık bir kare. Zaman akıyor, analog ruh baki..."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GİZLİ KEDİ GÜNLÜĞÜ PENCERESİ -->
+    <div id="kediModal" class="ortak-modal">
+        <div class="modal-icerik">
+            <span class="kapat-butonu" id="modalKapat">&times;</span>
+            <h2 style="color: #8c2d19; text-align: center; font-size: 2.5rem; margin-bottom: 5px;">🐾 Atölyenin Gerçek Sahipleri</h2>
+            <p style="text-align: center; font-style: italic; margin-bottom: 30px;">Resmi kadro ve biometrik kimlik kayıtları</p>
+            
+            <div class="Izgara-duzeni" style="margin-top: 20px;">
+                <!-- Kedi detayları aynı kalıyor -->
+                <div class="kedi-kimlik unsur-kart"><h2>Efekan</h2><div class="kimlik-satir"><strong>Görevi:</strong> Baş Marangoz / Talaş Müfettişi</div></div>
+                <div class="kedi-kimlik unsur-kart"><h2>Bedri</h2><div class="kimlik-satir"><strong>Görevi:</strong> Stüdyo Akort Sorumlusu</div></div>
+                <div class="kedi-kimlik unsur-kart"><h2>Bahri</h2><div class="kimlik-satir"><strong>Görevi:</strong> Şelale ve Su Şırıltısı Muhtarı</div></div>
+                <div class="kedi-kimlik unsur-kart"><h2>Zerdali</h2><div class="kimlik-satir"><strong>Görevi:</strong> Bahçe Çiçek Koruyucusu</div></div>
+                <div class="kedi-kimlik unsur-kart"><h2>Tahin</h2><div class="kimlik-satir"><strong>Görevi:</strong> Baş Tasi Yalayıcı \& Kablo Kemirgeni</div></div>
+                <div class="kedi-kimlik unsur-kart"><h2>Pekmez</h2><div class="kimlik-satir"><strong>Görevi:</strong> Genel Neşe Kaynağı \& Çay Dem Takipçisi</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🎻 YENİ: SAZ DETAY GÜNLÜKLERİ MODALI -->
+    <div id="sazModal" class="ortak-modal">
+        <div class="modal-icerik" id="sazModalIcerik">
+            <!-- JavaScript buranın içeriğini tıklanan saza göre dinamik dolduracak -->
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT MOTORU -->
+    <script>
+        // Kedi ve Story Modal Tetikleyicileri
+        var kediModal = document.getElementById("kediModal");
+        var kediButon = document.getElementById("kediButon");
+        var kediKapat = document.getElementById("modalKapat");
+        kediButon.onclick = function() { kediModal.style.display = "block"; document.body.style.overflow = "hidden"; }
+        kediKapat.onclick = function() { kediModal.style.display = "none"; document.body.style.overflow = "auto"; }
+
+        var storyModal = document.getElementById("storyModal");
+        var storyButon = document.getElementById("storyButon");
+        var storyKapat = document.getElementById("storyKapat");
+        var storyHalka = document.getElementById("storyHalka");
+
+        var storyYayinlanmaZamani = localStorage.getItem("story_yayin_tarihi");
+        var simdikiZaman = new Date().getTime();
+        if (!storyYayinlanmaZamani) { localStorage.setItem("story_yayin_tarihi", simdikiZaman); storyYayinlanmaZamani = simdikiZaman; }
+        if (simdikiZaman - storyYayinlanmaZamani > 24 * 60 * 60 * 1000) { storyHalka.classList.add("story-pasif"); }
+
+        storyButon.onclick = function() { storyModal.style.display = "block"; document.body.style.overflow = "hidden"; storyHalka.classList.add("story-pasif"); }
+        storyKapat.onclick = function() { storyModal.style.display = "none"; document.body.style.overflow = "auto"; }
+
+        // 🎻 SAZ VERİ BANKASI VE MODAL MOTORU
+        var sazVerileri = {
+            cura: {
+                baslik: "🪕 Cura (Atölyenin Haylazı)",
+                tekne: "Tekne: Dut Ağacı (Oyma)",
+                kapak: "Kapak: İnce Kanada Ladini",
+                frekans: "Tuning: 432 Hz - Akut Yüksek Tını",
+                hikaye: "Atölyede artan minik parçalardan üretildi. Perde aralıkları çok dar olduğu için çalarken parmaklar adeta klavyede dans ediyor. Pekmez ne zaman bu sazı duysa kulaklarını diker."
+            },
+            kisasap: {
+                baslik: "🪕 Kısa Sap Bağlama (Demirbaş)",
+                tekne: "Tekne: Yaprak Dut (Özel Kurutulmuş)",
+                kapak: "Kapak: Yerli Çam",
+                frekans: "Tuning: 432 Hz - Re Karar",
+                hikaye: "Atölyede her sabah demlenen çayın ilk bardağı eşliğinde bu sazın telleri tıngırdatılır. Gövdesindeki cila tamamen doğal gomalak olup, el emeğiyle 20 kat atılmıştır."
+            },
+            dede: {
+                baslik: "🪕 Dede Sazı (Üç Telli Kutsal)",
+                tekne: "Tekne: Oyma Ceviz (Kök Kısmından)",
+                kapak: "Kapak: Yaşlı Ladin",
+                frekans: "Tuning: Pençe Düzeni / Şah Hatayi Akort",
+                hikaye: "Perdesiz ve tezenesiz, sadece parmak vuruşlarıyla (Şelpe) çalınan kadim saz. Stüdyoda arkaya etnik techno pad basları atıp üstüne bu dede sazıyla doğaçlama geçmek ruhu arındırır."
+            },
+            uzunsap: {
+                baslik: "🪕 Uzun Sap Bağlama (Derin Yankı)",
+                tekne: "Tekne: Yaprak Ardıç",
+                kapak: "Kapak: Artvin Ladini",
+                frekans: "Tuning: Kara Düzen (Sol Karar)",
+                hikaye: "Ardıç ağacının o kendine has damarlı yapısı, sese inanılmaz bir bas derinliği katıyor. 98 BPM loop ritimlerimizin üzerine saz kaydı alırken en çok mikrofonlanan enstrümandır."
+            },
+            divan: {
+                baslik: "🪕 Divan Sazı (Meydanın Efendisi)",
+                tekne: "Tekne: Maun & Kelebek Kombinasyonu",
+                kapak: "Kapak: Yüksek Yoğunluklu Sedir",
+                frekans: "Tuning: Kalın Re / Do Karar Gür Ses",
+                hikaye: "Atölyenin en büyük sazı. Devasa teknesiyle adeta tek başına bir akustik amfi gibidir. Tellerine sert vurulduğunda tüm marangoz tezgahını ve talaşları titretir."
+            }
+        };
+
+        var sazModal = document.getElementById("sazModal");
+        var sazModalIcerik = document.getElementById("sazModalIcerik");
+
+        function sazModalAc(sazAnahtari) {
+            var saz = sazVerileri[sazAnahtari];
+            sazModalIcerik.innerHTML = `
+                <span class="kapat-butonu" onclick="sazModalKapat()">&times;</span>
+                <h2 style="color: #8c2d19; text-align: center; font-size: 2.2rem; margin-bottom: 20px;">${saz.baslik}</h2>
+                <div class="saz-kimlik">
+                    <div class="kimlik-satir"><strong>Ağaç ve Tekne Yapısı:</strong> ${saz.tekne}</div>
+                    <div class="kimlik-satir"><strong>Ses Tahtası (Kapak):</strong> ${saz.kapak}</div>
+                    <div class="kimlik-satir"><strong>Akort ve Frekans Standardı:</strong> ${saz.frekans}</div>
+                    <div class="kimlik-satir" style="border-bottom:none; margin-top:20px; line-height:1.6;">
+                        <strong>Atölye Hikayesi & Karakteri:</strong><br>${saz.hikaye}
+                    </div>
+                </div>
+            `;
+            sazModal.style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+
+        function sazModalKapat() { sazModal.style.display = "none"; document.body.style.overflow = "auto"; }
+
+        // Genel Boşluğa Tıklanınca Kapatma
+        window.onclick = function(event) {
+            if (event.target == kediModal) { kediModal.style.display = "none"; document.body.style.overflow = "auto"; }
+            if (event.target == storyModal) { storyModal.style.display = "none"; document.body.style.overflow = "auto"; }
+            if (event.target == sazModal) { sazModal.style.display = "none"; document.body.style.overflow = "auto"; }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Üretim Aşamasından | Nefes Atölye</title>
+    <style>
+        /* 🎛️ ATÖLYE RENK PALETİ */
+        :root {
+            --maun: #5c251a;         
+            --talas: #ebd2b0;        
+            --talas-acik: #fcf6ee;   
+            --kart-arkaplan: #423229; 
+            --sayfa-arkaplan: #f2e6d0; 
+            --kizil-toprak: #8c2d19;
+            --turuncu-ates: #d97d41;
+            --krem-isik: #fffdf9;
+            --yazi-koyu: #3b2f2f;
+        }
+
+        body {
+            background-color: var(--sayfa-arkaplan);
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--yazi-koyu);
+        }
+
+        .sayfa-kapsayici { 
+            width: 100%;
+            max-width: 935px; 
+            margin: 0 auto; 
+            padding: 20px 10px 80px 10px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        
+        .kilim-border {
+            height: 10px;
+            background: repeating-linear-gradient(45deg, var(--kizil-toprak), var(--kizil-toprak) 10px, var(--turuncu-ates) 10px, var(--turuncu-ates) 20px);
+            margin-bottom: 20px;
+        }
+        
+        .geridon-link {
+            display: inline-block; 
+            color: var(--kizil-toprak); 
+            text-decoration: none; 
+            font-weight: bold; 
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        /* 📸 PROFİL BAŞLIĞI */
+        .profil-ust-alan {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(66, 50, 41, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        .profil-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--maun);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+        .profil-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profil-bilgi h1 {
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+            color: var(--kart-arkaplan);
+        }
+        .profil-bilgi p {
+            margin: 0;
+            font-style: italic;
+            color: #6d5446;
+        }
+
+        /* 🎚️ IZGARA STRUCT */
+        .instagram-izgara { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 28px; 
+        }
+        
+        .galeri-oge {
+            position: relative;
+            aspect-ratio: 1 / 1; 
+            background-color: #000;
+            overflow: hidden;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .galeri-oge img, .galeri-oge video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .oge-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .galeri-oge:hover .oge-overlay {
+            opacity: 1;
+        }
+        .galeri-oge:hover img, .galeri-oge:hover video {
+            transform: scale(1.02);
+        }
+        .overlay-simge {
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        /* 🔍 LIGHTBOX */
+        .lightbox-arka-plan { 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(15, 12, 10, 0.95); 
+            z-index: 200; 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            backdrop-filter: blur(8px);
+        }
+        
+        .lightbox-kart-cerceve {
+            background: var(--krem-isik);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 4px solid var(--maun);
+            display: flex;
+            flex-direction: row;
+            transition: max-width 0.3s ease-in-out;
+        }
+        
+        .lightbox-kart-cerceve.yorum-acik {
+            max-width: 920px;
+        }
+
+        .lightbox-sol-blok {
+            width: 600px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .lightbox-kart-ust {
+            padding: 14px;
+            background: var(--maun);
+            color: var(--talas);
+            font-weight: bold;
+        }
+
+        .lightbox-medya-alani {
+            width: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1 / 1;
+        }
+        .lightbox-medya-alani img, .lightbox-medya-alani video {
+            max-width: 100%;
+            max-height: 60vh;
+            object-fit: contain;
+        }
+
+        .lightbox-sosyal-bar {
+            padding: 15px;
+            background: var(--talas);
+            border-top: 2px solid var(--maun);
+        }
+
+        .buton-grubu {
+            display: flex;
+            gap: 25px;
+        }
+
+        .sosyal-btn {
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+        }
+        .sosyal-btn:hover {
+            transform: scale(1.2);
+        }
+
+        /* PANEL */
+        .lightbox-sag-blok {
+            width: 0px; 
+            background: var(--talas);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: width 0.3s ease-in-out;
+        }
+        
+        .lightbox-kart-cerceve.yorum-acik .lightbox-sag-blok {
+            width: 320px; 
+            border-left: 3px solid var(--maun);
+        }
+
+        .yorum-panel-baslik {
+            padding: 14px;
+            background: var(--maun);
+            color: var(--talas);
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .yorum-akisi {
+            padding: 15px;
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 380px;
+        }
+
+        .yorum-bos-durum {
+            color: #7a6354;
+            font-style: italic;
+            text-align: center;
+            padding-top: 30px;
+            font-size: 0.85rem;
+        }
+
+        .tek-yorum {
+            background: var(--talas-acik);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(92, 37, 26, 0.15);
+            font-size: 0.85rem;
+            word-break: break-word;
+        }
+        .tek-yorum strong {
+            color: var(--maun);
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .yorum-form-alani {
+            padding: 15px;
+            background: var(--talas-acik);
+            border-top: 2px solid var(--maun);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .yorum-form-alani input, .yorum-form-alani textarea {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid var(--maun);
+            border-radius: 6px;
+            background: var(--krem-isik);
+            font-size: 0.85rem;
+            box-sizing: border-box;
+            color: var(--yazi-koyu);
+        }
+
+        .yorum-form-alani textarea {
+            resize: none;
+            height: 65px;
+        }
+
+        .karakter-sayici-alani { position: relative; width: 100%; }
+        #karakterSayac { position: absolute; bottom: 6px; right: 8px; font-size: 0.75rem; color: #888; }
+
+        .yorum-gonder-btn {
+            background: var(--maun); color: var(--talas); border: none;
+            padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer;
+        }
+
+        /* 🗝️ YÖNETİCİ/TEMİZLİKÇİ BUTONU VE PANELİ */
+        .temizlikci-tetikleyici {
+            position: absolute; bottom: 15px; right: 15px;
+            font-size: 1.2rem; cursor: pointer; opacity: 0.4; transition: opacity 0.2s;
+            user-select: none;
+        }
+        .temizlikci-tetikleyici:hover { opacity: 1; }
+
+        .temizlikci-panel {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(43, 31, 25, 0.98); z-index: 300;
+            display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .temizlikci-icerik {
+            background: var(--talas-acik); width: 90%; max-width: 700px;
+            border-radius: 12px; border: 4px solid var(--maun); overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column;
+            max-height: 85vh;
+        }
+
+        .temizlikci-tablo-alan { padding: 20px; overflow-y: auto; flex-grow: 1; }
+        
+        .yonetim-tablo {
+            width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;
+        }
+        .yonetim-tablo th { background: var(--maun); color: var(--talas); padding: 10px; }
+        .yonetim-tablo td { padding: 10px; border-bottom: 1px solid rgba(92, 37, 26, 0.2); }
+        
+        .sil-btn {
+            background: var(--kizil-toprak); color: white; border: none; 
+            padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold;
+        }
+        .sil-btn:hover { background: red; }
+
+        /* Klasik Nav */
+        .lightbox-ok {
+            position: fixed; top: 50%; transform: translateY(-50%); 
+            background: var(--maun); color: var(--talas); border: 2px solid var(--turuncu-ates); 
+            font-size: 1.5rem; width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 220;
+        }
+        .ok-sol { left: 20px; } .ok-sag { right: 20px; }
+        .lightbox-kapat-btn { position: fixed; top: 20px; right: 25px; font-size: 2.5rem; color: var(--krem-isik); cursor: pointer; z-index: 230; }
+
+        @media (max-width: 768px) {
+            .instagram-izgara { gap: 4px; }
+            .profil-ust-alan { gap: 20px; padding-bottom: 20px; }
+            .profil-avatar { width: 80px; height: 80px; }
+            .lightbox-kart-cerceve { flex-direction: column; max-width: 90% !important; }
+            .lightbox-sol-blok { width: 100%; }
+            .lightbox-kart-cerceve.yorum-acik .lightbox-sag-blok { width: 100%; border-left: none; border-top: 3px solid var(--maun); height: 280px; }
+            .lightbox-sag-blok { width: 100%; height: 0; }
+            .lightbox-ok { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sayfa-kapsayici">
+    <div class="kilim-border"></div>
+    <a href="/" class="geridon-link">← Atölyeye Geri Dön</a>
+
+    <div class="profil-ust-alan">
+        <div class="profil-avatar">
+            <img src="/gorseller/uretim-asamasindan/pp.jpg" alt="Nefes Atölye Profil">
+        </div>
+        <div class="profil-bilgi">
+            <h1>Üretim günlüklerimiz</h1>
+            <p>"Kusur bulmak için bakma birine, bulmak için bakarsan bulursun. Kusuru örtmeyi marifet edin kendine, işte o zaman kusursuz olursun." </p>
+        </div>
+    </div>
+
+    <div class="instagram-izgara">
+        {{ $resimYolu := "static/gorseller/uretim-asamasindan/resimler" }}
+        {{ if fileExists $resimYolu }}
+            {{ range (readDir $resimYolu) }}
+                {{ if not .IsDir }}
+                <div class="galeri-oge">
+                    <img src="/gorseller/uretim-asamasindan/resimler/{{ .Name }}" alt="Atölye Günlükleri">
+                    <div class="oge-overlay"><span class="overlay-simge">📸</span></div>
+                </div>
+                {{ end }}
+            {{ end }}
+        {{ end }}
+
+        {{ $videoYolu := "static/gorseller/uretim-asamasindan/videolar" }}
+        {{ if fileExists $videoYolu }}
+            {{ range (readDir $videoYolu) }}
+                {{ if not .IsDir }}
+                <div class="galeri-oge">
+                    <video src="/gorseller/uretim-asamasindan/videolar/{{ .Name }}" muted playsinline></video>
+                    <div class="oge-overlay"><span class="overlay-simge">🎥</span></div>
+                </div>
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    </div>
+
+    <div class="temizlikci-tetikleyici" onclick="temizlikciGiris()">🔑</div>
+</div>
+
+<div id="galeriLightbox" class="lightbox-arka-plan">
+    <span class="lightbox-kapat-btn" onclick="lightboxKapat()">&times;</span>
+    <div class="lightbox-ok ok-sol" onclick="medyaDegistir(-1)">&#10094;</div>
+    
+    <div class="lightbox-kart-cerceve" id="lightboxCerceve">
+        <div class="lightbox-sol-blok">
+            <div class="lightbox-kart-ust"><span>✨ nefes.atolye</span></div>
+            <div id="lightboxMedyaAlani" class="lightbox-medya-alani"></div>
+            
+            <div class="lightbox-sosyal-bar">
+                <div class="buton-grubu">
+                    <button class="sosyal-btn like-btn" onclick="aksiyonLike()">
+                        <span class="kalp-ikon">🤍</span>
+                    </button>
+                    <button class="sosyal-btn" onclick="aksiyonYorumPanelToggle()"><span>💬</span></button>
+                    <button id="shareBtn" class="sosyal-btn" onclick="aksiyonPaylas()"><span>🔗</span></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="lightbox-sag-blok" id="yorumPaneli">
+            <div class="yorum-panel-baslik">Atölye Sohbetleri</div>
+            <div class="yorum-akisi" id="yorumAkisiContainer"></div>
+            <div class="yorum-form-alani">
+                <input type="text" id="yorumcuNick" placeholder="Takma adınız...">
+                <div class="karakter-sayici-alani">
+                    <textarea id="yorumcuMetin" placeholder="Atölye günlüğüne yazın..." maxlength="140" oninput="yorumKarakterSay()"></textarea>
+                    <span id="karakterSayac">0/140</span>
+                </div>
+                <button class="yorum-gonder-btn" onclick="yorumEkleSubmit()">Gönder 🛠️</button>
+            </div>
+        </div>
+    </div>
+    <div class="lightbox-ok ok-sag" onclick="medyaDegistir(1)">&#10095;</div>
+</div>
+
+<div id="temizlikciModal" class="temizlikci-panel">
+    <div class="temizlikci-icerik">
+        <div class="yorum-panel-baslik" style="display:flex; justify-content:space-between; align-items:center;">
+            <span>Yönetici / Temizlikçi Paneli (IP Denetimi)</span>
+            <span style="cursor:pointer; font-size:1.5rem;" onclick="temizlikciKapat()">&times;</span>
+        </div>
+        <div class="temizlikci-tablo-alan">
+            <table class="yonetim-tablo">
+                <thead>
+                    <tr>
+                        <th>Medya No</th>
+                        <th>Tür</th>
+                        <th>Ziyaretçi IP</th>
+                        <th>İçerik / Aksiyon</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody id="temizlikciTabloGövde">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    var medyaListesi = [];
+    var mevcutIndeks = 0;
+    
+    // Tarayıcı kapatılsa da verilerin uçmaması için LocalStorage entegrasyonu kuruldu
+    var veritabani = JSON.parse(localStorage.getItem('nefes_atolye_data')) || {
+        begeniler: {}, // { medyaSrc: [ip, ip] }
+        yorumlar: []   // [ {id: 1, src: "", nick: "", metin: "", ip: "", tur: "yorum"} ]
+    };
+
+    // Ziyaretçinin IP adresini dinamik alıyoruz. Engellenme ihtimaline karşı yedekli simülasyon içerir.
+    var ziyaretciIP = "192.168.1.1"; 
+    fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => { ziyaretciIP = data.ip; })
+        .catch(() => { 
+            // Eğer reklam engelleyici veya koruma varsa rastgele lokal IP atar
+            ziyaretciIP = "172.16." + Math.floor(Math.random() * 254) + "." + Math.floor(Math.random() * 254);
+        });
+
+    function veritabaniKaydet() {
+        localStorage.setItem('nefes_atolye_data', JSON.stringify(veritabani));
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+        var ogeler = document.querySelectorAll('.galeri-oge');
+        ogeler.forEach(function(oge, index) {
+            var medya = oge.querySelector('img, video');
+            var tur = medya.tagName.toLowerCase();
+            var src = medya.getAttribute('src');
+            medyaListesi.push({ src: src, tur: tur });
+
+            oge.addEventListener('click', function() { lightboxAc(index); });
+        });
+    });
+
+    function lightboxAc(indeks) {
+        mevcutIndeks = indeks;
+        document.getElementById('lightboxCerceve').classList.remove('yorum-acik'); 
+        document.getElementById('galeriLightbox').style.display = 'flex';
+        medyaYukle(mevcutIndeks);
+        document.body.style.overflow = 'hidden';
+    }
+
+    function lightboxKapat() {
+        document.getElementById('lightboxMedyaAlani').innerHTML = ""; 
+        document.getElementById('galeriLightbox').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function medyaYukle(indeks) {
+        var alan = document.getElementById('lightboxMedyaAlani');
+        var veri = medyaListesi[indeks];
+        alan.innerHTML = "";
+
+        if (veri.tur === 'img') {
+            var img = document.createElement('img'); img.src = veri.src; alan.appendChild(img);
+        } else if (veri.tur === 'video') {
+            var video = document.createElement('video'); video.src = veri.src;
+            video.controls = true; video.autoplay = true; video.loop = true; video.style.width = '100%';
+            alan.appendChild(video);
+        }
+
+        // Beğeni Durum Senkronizasyonu (IP bazlı kontrol)
+        var btn = document.querySelector('.like-btn');
+        var kalp = btn.querySelector('.kalp-ikon');
+        var ips = veritabani.begeniler[veri.src] || [];
+        
+        if (ips.includes(ziyaretciIP)) {
+            btn.classList.add('aktif'); kalp.innerText = '❤️';
+        } else {
+            btn.classList.remove('aktif'); kalp.innerText = '🤍';
+        }
+        
+        document.getElementById('shareBtn').innerHTML = '<span>🔗</span>';
+        yorumAkisiniGuncelle(indeks);
+        
+        document.getElementById('yorumcuNick').value = "";
+        document.getElementById('yorumcuMetin').value = "";
+        document.getElementById('karakterSayac').innerText = "0/140";
+    }
+
+    function medyaDegistir(yon) {
+        mevcutIndeks += yon;
+        if (mevcutIndeks >= medyaListesi.length) { mevcutIndeks = 0; }
+        if (mevcutIndeks < 0) { mevcutIndeks = medyaListesi.length - 1; }
+        medyaYukle(mevcutIndeks);
+    }
+
+    // 2. DÜZELTME: RAKAMSIZ VE IP LOG KAYITLI BEĞENİ SİSTEMİ
+    function aksiyonLike() {
+        var veri = medyaListesi[mevcutIndeks];
+        var btn = document.querySelector('.like-btn');
+        var kalp = btn.querySelector('.kalp-ikon');
+        
+        if (!veritabani.begeniler[veri.src]) {
+            veritabani.begeniler[veri.src] = [];
+        }
+        
+        var ips = veritabani.begeniler[veri.src];
+        var indeks = ips.indexOf(ziyaretciIP);
+
+        if (indeks === -1) {
+            // Beğenildi kaydı ekle
+            ips.push(ziyaretciIP);
+            btn.classList.add('aktif');
+            kalp.innerText = '❤️';
+            
+            // Temizlikçi paneline log olarak ekle
+            veritabani.yorumlar.push({
+                id: Date.now() + Math.random(),
+                src: veri.src,
+                nick: "Sistem",
+                metin: "Görseli Beğendi (Kalp)",
+                ip: ziyaretciIP,
+                tur: "like"
+            });
+        } else {
+            // Beğeni geri çekildi
+            ips.splice(indeks, 1);
+            btn.classList.remove('aktif');
+            kalp.innerText = '🤍';
+            
+            veritabani.yorumlar.push({
+                id: Date.now() + Math.random(),
+                src: veri.src,
+                nick: "Sistem",
+                metin: "Beğeniyi Geri Çekti",
+                ip: ziyaretciIP,
+                tur: "like"
+            });
+        }
+        veritabaniKaydet();
+    }
+
+    function aksiyonYorumPanelToggle() {
+        document.getElementById('lightboxCerceve').classList.toggle('yorum-acik');
+    }
+
+    function yorumAkisiniGuncelle(indeks) {
+        var konteyner = document.getElementById('yorumAkisiContainer');
+        konteyner.innerHTML = "";
+        var veri = medyaListesi[indeks];
+        
+        // Sadece normal yorum olanları arayüze listele (Like loglarını gizle)
+        var aktifYorumlar = veritabani.yorumlar.filter(y => y.src === veri.src && y.tur === "yorum");
+        
+        if(aktifYorumlar.length === 0) {
+            konteyner.innerHTML = '<div class="yorum-bos-durum">Henüz yorum yok. İlk sözü siz söyleyin...</div>';
+            return;
+        }
+
+        aktifYorumlar.forEach(function(y) {
+            var d = document.createElement('div');
+            d.className = 'tek-yorum';
+            d.innerHTML = "<strong>@" + y.nick + "</strong>" + y.metin;
+            konteyner.appendChild(d);
+        });
+        konteyner.scrollTop = konteyner.scrollHeight; 
+    }
+
+    function yorumEkleSubmit() {
+        var nickInput = document.getElementById('yorumcuNick');
+        var metinInput = document.getElementById('yorumcuMetin');
+        var nick = nickInput.value.trim() || "Ziyaretçi";
+        var metin = metinInput.value.trim();
+        
+        if (!metin) return; 
+
+        var veri = medyaListesi[mevcutIndeks];
+        
+        // Veritabanına IP adresiyle kaydet
+        veritabani.yorumlar.push({
+            id: Date.now(),
+            src: veri.src,
+            nick: nick,
+            metin: metin,
+            ip: ziyaretciIP,
+            tur: "yorum"
+        });
+        
+        veritabaniKaydet();
+        yorumAkisiniGuncelle(mevcutIndeks);
+        metinInput.value = "";
+        document.getElementById('karakterSayac').innerText = "0/140";
+    }
+
+    function yorumKarakterSay() {
+        var l = document.getElementById('yorumcuMetin').value.length;
+        document.getElementById('karakterSayac').innerText = l + "/140";
+    }
+
+    // 1. DÜZELTME: KESİN ÇALIŞAN PAYLAŞMA MEKANİZMASI (HTTPS ve Fallback Uyumlu)
+    function aksiyonPaylas() {
+        // Dosyanın tam url adresini oluşturur
+        var url = window.location.origin + medyaListesi[mevcutIndeks].src;
+        var btn = document.getElementById('shareBtn');
+
+        // Masaüstü veya Güvensiz HTTP ortamlarında kopyalama yöntemini zorla
+        navigator.clipboard.writeText(url).then(function() {
+            btn.innerHTML = '<span style="font-size:1rem; color:var(--maun); font-weight:bold;">✔️</span>';
+            setTimeout(function(){ btn.innerHTML = '<span>🔗</span>'; }, 1500);
+        }).catch(function() {
+            // Eğer en sert tarayıcı engeline takılırsa klasik prompt açar pencere kilitlenmez
+            prompt("Paylaşım bağlantısı hazır, kopyalayabilirsiniz:", url);
+        });
+
+        // Eğer ortam güvenli HTTPS ise ve mobil destek varsa yerel cihaz paylaşımını da ek tetikle
+        if (navigator.share && window.location.protocol === 'https:') {
+            navigator.share({
+                title: 'Nefes Atölye | Günlük',
+                url: url
+            }).catch(e => console.log("Yerel menü kapatıldı."));
+        }
+    }
+
+    /* 3. DÜZELTME: TEMİZLİKÇİ PANELİ FONKSİYONLARI */
+    function temizlikciGiris() {
+        var sifre = prompt("Temizlikçi paneli şifresini girin:");
+        if (sifre === "1234") { // <--- BURADAN ŞİFREYİ DEĞİŞTİREBİLİRSİNİZ
+            document.getElementById('temizlikciModal').style.display = 'flex';
+            temizlikciTabloYenile();
+        } else if (sifre !== null) {
+            alert("Hatalı şifre! Atölye dışına yönlendiriliyorsunuz.");
+        }
+    }
+
+    function temizlikciKapat() {
+        document.getElementById('temizlikciModal').style.display = 'none';
+    }
+
+    function temizlikciTabloYenile() {
+        var govde = document.getElementById('temizlikciTabloGövde');
+        govde.innerHTML = "";
+        
+        if (veritabani.yorumlar.length === 0) {
+            govde.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Henüz hiçbir hareket (Yorum/Beğeni) yok.</td></tr>";
+            return;
+        }
+
+        // En yeni hareketleri en üstte göster
+        var tersListe = [...veritabani.yorumlar].reverse();
+
+        tersListe.forEach(function(y) {
+            var dosyaAdi = y.src.substring(y.src.lastIndexOf('/') + 1);
+            var tr = document.createElement('tr');
+            
+            // Beğeni satırları kırmızımsı, yorumlar nötr olsun
+            if(y.tur === "like") { tr.style.background = "rgba(217, 125, 65, 0.08)"; }
+
+            tr.innerHTML = `
+                <td>${dosyaAdi}</td>
+                <td><strong>${y.tur === 'like' ? '❤️ Beğeni' : '💬 Yorum'}</strong></td>
+                <td style="color:var(--kizil-toprak); font-family:monospace;">${y.ip}</td>
+                <td><strong>@${y.nick}:</strong> ${y.metin}</td>
+                <td><button class="sil-btn" onclick="temizlikciHareketiSil(${y.id})">Sil</button></td>
+            `;
+            govde.appendChild(tr);
+        });
+    }
+
+    function temizlikciHareketiSil(id) {
+        if(confirm("Bu kaydı kalıcı olarak silmek istediğinize emin misiniz?")) {
+            veritabani.yorumlar = veritabani.yorumlar.filter(y => y.id !== id);
+            veritabaniKaydet();
+            temizlikciTabloYenile();
+            // Açık olan lightbox varsa arayüzü anlık tazele
+            if (document.getElementById('galeriLightbox').style.display === 'flex') {
+                yorumAkisiniGuncelle(mevcutIndeks);
+            }
+        }
+    }
+
+    // Klavye kontrolleri
+    document.addEventListener('keydown', function(e) {
+        if (document.getElementById('galeriLightbox').style.display === 'flex') {
+            if (e.key === 'ArrowLeft') medyaDegistir(-1);
+            if (e.key === 'ArrowRight') medyaDegistir(1);
+            if (e.key === 'Escape') lightboxKapat();
+        }
+    });
+</script>
+
+</body>
+</html>

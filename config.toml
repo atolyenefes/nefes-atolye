@@ -1,0 +1,16 @@
+baseURL = 'http://localhost:1313/'
+languageCode = 'tr'
+title = 'Nefes Atölye'
+theme = 'blowfish'
+[params]
+  customCSS = true
+[security]
+  allowContent = ['^text/html$', '^text/markdown$']
+
+[[menu.main]]
+  name = "Sazlarımız"
+  url = "/sazlarimiz/"
+  weight = 10
+
+[permalinks]
+  sazlarimiz = "/sazlarimiz/"

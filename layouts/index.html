@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Site.Title }}</title>
+    
+    {{ $css := resources.Get "css/guestbook.css" | minify }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+    {{ $styles := resources.Get "css/main.css" | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ $styles.RelPermalink }}">
+
+</head>
+<body>
+
+    <div class="site-kapsayici">
+        </div>
+
+    <div class="site-kapsayici">
+        <div class="kilim-border"></div>
+
+        <div class="ust-bar">
+            <div class="header-ve-rozet-grubu" style="display: flex; align-items: center; gap: 40px;">
+                <header>
+                    <h1>{{ .Site.Title }}</h1>
+                    <p style="font-style: italic; color: #5c4033; margin-top: 1px; white-space: pre-line; text-align: center; line-height: 1.3; font-weight: 600;">
+                        Alemde meşhud olan bu devran,
+                        Tekâmül içindir, kemale doğru.
+                        Her nokta cevval, her zerre raksan,
+                        Uçup giderler visale doğru....
+                    </p>
+                </header>
+
+                <div class="award-rozet" onclick="sazlarModalAc()">
+                    <span style="line-height: 1.2;">Kuşların Yolculuğu Sezonu</span>
+                </div>
+            </div>
+                    
+            <div class="story-alani" id="storyButon" title="Atölyeden Anlık Günlük">
+                <div class="story-baloncuk" id="storyHalka">📸</div>
+                <div class="story-metni">Anlık atölye halleri</div>
+            </div>
+        </div>
+
+        <section class="marangoz-tezgahi" style="position: relative;">
+            <span style="position: absolute; top: 10px; left: 15px; font-size: 1.5rem;">🪵</span>
+            <span style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem;">🪚</span>
+            <h2>🛠️ Atölyemize hoş geldiniz</h2>
+            
+            <img src="/gorseller/tezgah.jpg" 
+                 alt="Antika Marangoz Tezgahı" 
+                 class="tezgah-gorseli" 
+                 onerror="this.style.display='none';">
+        </section>
+
+        <div class="saz-askiligi">
+            <div class="asko-kalasi"></div>
+            
+            <div class="sazlar-hizasi">
+                <div class="asili-saz">
+                    <img src="{{ "gorseller/sazlar/ruzba.png" | relURL }}" alt="Ruzba" class="saz-simge boy-ruzba">
+                    <span class="saz-ismi">Ruzba</span>
+                </div>
+
+                <div class="asili-saz">
+                    <img src="{{ "gorseller/sazlar/cura.png" | relURL }}" alt="Cura" class="saz-simge boy-cura">
+                    <span class="saz-ismi">Cura</span>
+                </div>
+
+                <div class="asili-saz">
+                    <img src="{{ "gorseller/sazlar/dedesazi.png" | relURL }}" alt="Dede Sazı" class="saz-simge boy-dede">
+                    <span class="saz-ismi">Dede Sazı</span>
+                </div>
+
+                <div class="asili-saz">
+                    <img src="{{ "gorseller/sazlar/baglama.png" | relURL }}" alt="Kısa Sap Bağlama" class="saz-simge boy-kisa">
+                    <span class="saz-ismi">Kısa Sap Bağlama</span>
+                </div>
+
+                <div class="asili-saz">
+                    <img src="{{ "gorseller/sazlar/uzunsap.png" | relURL }}" alt="Uzun Sap Bağlama" class="saz-simge boy-uzun">
+                    <span class="saz-ismi">Uzun Sap Bağlama</span>
+                </div>
+
+                <div class="asili-saz">
+                    <img src="{{ "gorseller/sazlar/divan.png" | relURL }}" alt="Divan Sazı" class="saz-simge boy-divan">
+                    <span class="saz-ismi">Divan Sazı</span>
+                </div>
+            </div>
+        </div>
+
+        <main class="Izgara-duzeni">
+            <div class="unsur-kart" onclick="atolyeModalAc()" style="cursor: pointer;">
+                <h2>🪵 Atölye</h2>
+                <p>Atölye uğraşılarımız, üretimlerimiz ve günlüklerimiz</p>
+                <span class="filiz">🌱</span>
+            </div>
+            
+            <div class="unsur-kart">
+                <h2>🎵 Stüdyo</h2>
+                <p>Kayıtlarımız, doğaçlamalarımız ve daha fazlası... Biraz çalışmamız gerek.. yakında..</p>
+                <span class="filiz">🌿</span>
+            </div>
+            
+            <div class="unsur-kart" style="display: none;">
+                <h2>🏡 Bahçe <span class="selale-akisi">🌊</span></h2>
+                <p>Doğal taş şelalenin şırıltısı, toprakla hemhal olma ve büyüyen çiçeklerin takibi.</p>
+                <span class="filiz">🌸</span>
+            </div>
+        </main>
+    </div> <div class="gozcu-kedi-sol" id="kediButon" title="Kedi Günlüğünü Aç!">🐈</div>
+
+    <div class="kopek-konteyner" onmouseenter="usDusunceUret()">
+        <div class="konusma-balonu" id="usBalon">...</div>
+        <img src="/gorseller/kopek.png" class="kopek-resim" alt="Mahallenin Reisi Us">
+    </div>
+
+    <div class="gb-wrapper-main">
+        <div class="guestbook-button-container">
+            <button id="openBookBtn" class="museum-book-btn" title="Atölye Ziyaretçi Defteri">
+                <div class="btn-cover"></div>
+                <div class="btn-pages"></div>
+                <span class="btn-text">📜 Defter</span>
+            </button>
+        </div>
+    </div>
+
+    <audio id="globalKediOynatici" onended="kediSesSifirla()"></audio>
+
+
+    <div id="atolyeModal" class="ortak-modal">
+        <div class="modal-icerik">
+            <span class="kapat-butonu" onclick="atolyeModalKapat()">&times;</span>
+            <h2 style="color: #8c2d19; text-align: center; font-size: 2.5rem; margin-bottom: 5px;">🪵 Atölye Dünyası</h2>
+            <p style="text-align: center; font-style: italic; margin-bottom: 30px;">Zanaat ve üretime açılan kapılar</p>
+            
+            <div class="Izgara-duzeni" style="margin-top: 20px;">
+                <a href="/sazlarimiz/" style="text-decoration: none; color: inherit;">
+                    <div class="unsur-kart" style="transform: rotate(-1deg); margin: 0;">
+                        <h2>🎻 Sazlarımız</h2>
+                        <p>Atölyemizde hayat bulan, her biri ayrı karakter ve tınıya sahip sazlarımızın multimedya profilleri.</p>
+                        <span style="position: absolute; bottom: 10px; right: 15px; font-size: 1.5rem;">✨</span>
+                    </div>
+                </a>
+
+                <a href="/uretim-asamasi/" style="text-decoration: none; color: inherit;">
+                    <div class="unsur-kart" style="transform: rotate(1.5deg); margin: 0;">
+                        <h2>🪚 Üretim Aşamasından</h2>
+                        <p>Ağaçtan saza; ağacın seçimi, oyulması, kapak tesviyesi ve cilalama süreçlerinin ham günlükleri.</p>
+                        <span style="position: absolute; bottom: 10px; right: 15px; font-size: 1.5rem;">🪵</span>
+                    </div>
+                </a>
+
+                <a href="/sanatsal-faaliyetler/" style="text-decoration: none; color: inherit;">
+                    <div class="unsur-kart" style="transform: rotate(-0.5deg); margin: 0;">
+                        <h2>🏺 Sanatsal Faaliyetler</h2>
+                        <p>Devre edip alemleri dolaştım
+Bir sanata kaç sarıldım kimbilir</p>
+                        <span style="position: absolute; bottom: 10px; right: 15px; font-size: 1.5rem;">🎨</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="storyModal" class="ortak-modal">
+        <div class="modal-icerik" style="max-width: 550px; position: relative;">
+            <span class="kapat-butonu" id="storyKapat">&times;</span>
+            <h2 style="color: #8c2d19; text-align: center; font-size: 1.8rem; margin-bottom: 15px;">⚡ Atölyeden O An...</h2>
+            
+            <div class="story-medya-kapsayici" style="position: relative; display: flex; align-items: center; justify-content: center; background: #170907; border-radius: 8px; min-height: 400px; overflow: hidden;">
+                <div id="dinamikMedyaAlani" style="width: 100%; text-align: center;"></div>
+
+                <button id="storyOnceki" style="position: absolute; left: 10px; background: rgba(0,0,0,0.6); color: #d4af37; border: 1px solid #d4af37; font-size: 20px; cursor: pointer; border-radius: 50%; width: 40px; height: 40px; z-index: 10; display: none;">&#10094;</button>
+                <button id="storySonraki" style="position: absolute; right: 10px; background: rgba(0,0,0,0.6); color: #d4af37; border: 1px solid #d4af37; font-size: 20px; cursor: pointer; border-radius: 50%; width: 40px; height: 40px; z-index: 10; display: none;">&#10095;</button>
+            </div>
+            <p style="font-style: italic; margin-top: 15px; color: #5c4033; text-align: center;" id="storyYazisi">" Zaman akıyor..."</p>
+        </div>
+    </div>
+
+    <div id="kediModal" class="ortak-modal" style="display: none;">
+        <div class="modal-icerik" style="background: #f2e6d0 !important; border: 4px solid #5c4033 !important; box-shadow: 15px 15px 0px #8c2d19 !important;">
+            <span class="kapat-butonu" id="modalKapat" style="color: #8c2d19 !important; font-size: 2.5rem !important;">&times;</span>
+            
+            <div class="kedi-sayfa-kapsayici">
+                <div class="kedi-kilim-border"></div>
+                <h2 style="color: #8c2d19; text-align: center; font-size: 2.3rem; margin: 0 0 5px 0; font-family: 'Georgia', serif; font-weight: bold;">🐾Emeği geçenler..</h2>
+                <p style="text-align: center; font-style: italic; margin-bottom: 25px; color: #5c4033;">Alem çiçek olsa arı ben olsam; Dost elinden tatlı bal bulamadım..</p>
+                
+                <div class="kedi-profilleri-izgara">
+                    <div class="kedi-profil-karti" data-klasor="efekan" onmouseenter="kediHoverBaslat(this)" onmouseleave="kediHoverDurdur(this)">
+                        <div class="kedi-ses-butonu" onclick="kediSesTetikle(this); event.stopPropagation();">▶</div>
+                        <div class="kedi-galeri-konteyner" onclick="kediGaleriModalAc(this.closest('.kedi-profil-karti'))">
+                            <img src="/gorseller/cats/efekan/efekankapak.jpg" class="kedi-ana-resim" loading="lazy">
+                            <div class="kedi-hover-medya"></div>
+                        </div>
+                        <h2 class="kedi-baslik">Efekan</h2>
+                        <div class="kedi-felsefe">Atölyenin en kıdemlisi. Gözlerini tezgahtan ayırmaz, her talaşın düşüş açısını büyük bir titizlikle inceler.</div>
+                        <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Baş Marangoz / Talaş Müfettişi</div>
+                        <div class="kedi-kunye-izgarasi">
+                            <div class="kedi-kunye-etiket">🪐 Karakter: <span>Sakin</span></div>
+                            <div class="kedi-kunye-etiket">🔥 Element: <span>Toprak</span></div>
+                        </div>
+                    </div>
+
+                    <div class="kedi-profil-karti" data-klasor="bedri" onmouseenter="kediHoverBaslat(this)" onmouseleave="kediHoverDurdur(this)">
+                        <div class="kedi-ses-butonu" onclick="kediSesTetikle(this); event.stopPropagation();">▶</div>
+                        <div class="kedi-galeri-konteyner" onclick="kediGaleriModalAc(this.closest('.kedi-profil-karti'))">
+                            <img src="/gorseller/cats/bedri/bedrikapak.jpg" class="kedi-ana-resim" loading="lazy">
+                            <div class="kedi-hover-medya"></div>
+                        </div>
+                        <h2 class="kedi-baslik">Bedri</h2>
+                        <div class="kedi-felsefe">Tellerin frekansını kulaklarıyla takip eder. Miksaj esnasında monitörlerin tam üzerinde uyuyarak akort onaylar.</div>
+                        <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Stüdyo Akort Sorumlusu</div>
+                        <div class="kedi-kunye-izgarasi">
+                            <div class="kedi-kunye-etiket">🪐 Karakter: <span>Seçici</span></div>
+                            <div class="kedi-kunye-etiket">🔥 Element: <span>Hava</span></div>
+                        </div>
+                    </div>
+
+                    <div class="kedi-profil-karti" data-klasor="bahri" onmouseenter="kediHoverBaslat(this)" onmouseleave="kediHoverDurdur(this)">
+                        <div class="kedi-ses-butonu" onclick="kediSesTetikle(this); event.stopPropagation();">▶</div>
+                        <div class="kedi-galeri-konteyner" onclick="kediGaleriModalAc(this.closest('.kedi-profil-karti'))">
+                            <img src="/gorseller/cats/bahri/bahrikapak.jpg" class="kedi-ana-resim" loading="lazy">
+                            <div class="kedi-hover-medya"></div>
+                        </div>
+                        <h2 class="kedi-baslik">Bahri</h2>
+                        <div class="kedi-felsefe">6 aylık bu utangaç delikanlı, akan suların ve şelale tınılarının ritmine kapılıp derin düşüncelere dalar.</div>
+                        <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Şelale ve Su Şırıltısı Muhtarı</div>
+                        <div class="kedi-kunye-izgarasi">
+                            <div class="kedi-kunye-etiket">🪐 Karakter: <span>Utangaç</span></div>
+                            <div class="kedi-kunye-etiket">🔥 Element: <span>Su</span></div>
+                        </div>
+                    </div>
+
+                    <div class="kedi-profil-karti" data-klasor="Zerdal" onmouseenter="kediHoverBaslat(this)" onmouseleave="kediHoverDurdur(this)">
+                        <div class="kedi-ses-butonu" onclick="kediSesTetikle(this); event.stopPropagation();">▶</div>
+                        <div class="kedi-galeri-konteyner" onclick="kediGaleriModalAc(this.closest('.kedi-profil-karti'))">
+                            <img src="/gorseller/cats/Zerdal/zerdokapak.jpg" class="kedi-ana-resim" loading="lazy">
+                            <div class="kedi-hover-medya"></div>
+                        </div>
+                        <h2 class="kedi-baslik">Zerdali</h2>
+                        <div class="kedi-felsefe">Atölyenin yeşil yaprakları, Monstera ve Pathos sarmaşıkları ondan sorulur. Botanik bekçisidir.</div>
+                        <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Bahçe Çiçek Koruyucusu</div>
+                        <div class="kedi-kunye-izgarasi">
+                            <div class="kedi-kunye-etiket">🪐 Karakter: <span>Meraklı</span></div>
+                            <div class="kedi-kunye-etiket">🔥 Element: <span>Toprak</span></div>
+                        </div>
+                    </div>
+
+                    <div class="kedi-profil-karti" data-klasor="tahin" onmouseenter="kediHoverBaslat(this)" onmouseleave="kediHoverDurdur(this)">
+                        <div class="kedi-ses-butonu" onclick="kediSesTetikle(this); event.stopPropagation();">▶</div>
+                        <div class="kedi-galeri-konteyner" onclick="kediGaleriModalAc(this.closest('.kedi-profil-karti'))">
+                            <img src="/gorseller/cats/tahin/tahinkapak.jpg" class="kedi-ana-resim" loading="lazy">
+                            <div class="kedi-hover-medya"></div>
+                        </div>
+                        <h2 class="kedi-baslik">Tahin</h2>
+                        <div class="kedi-felsefe">Aramıza yeni katılan 2 aylık sarı fırtına. Jack kablolarını ve stüdyonun tüm düzenini kemirerek test eder.</div>
+                        <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Baş Tasi Yalayıcı & Kablo Kemirgeni</div>
+                        <div class="kedi-kunye-izgarasi">
+                            <div class="kedi-kunye-etiket">🪐 Karakter: <span>Yaramaz</span></div>
+                            <div class="kedi-kunye-etiket">🔥 Element: <span>Ateş</span></div>
+                        </div>
+                    </div>
+
+                    <div class="kedi-profil-karti" data-klasor="pekmez" onmouseenter="kediHoverBaslat(this)" onmouseleave="kediHoverDurdur(this)">
+                        <div class="kedi-ses-butonu" onclick="kediSesTetikle(this); event.stopPropagation();">▶</div>
+                        <div class="kedi-galeri-konteyner" onclick="kediGaleriModalAc(this.closest('.kedi-profil-karti'))">
+                            <img src="/gorseller/cats/pekmez/pekmezkapak.jpg" class="kedi-ana-resim" loading="lazy">
+                            <div class="kedi-hover-medya"></div>
+                        </div>
+                        <h2 class="kedi-baslik">Pekmez</h2>
+                        <div class="kedi-felsefe">Tahin'in kız kardeşi. Bardaktan çay demi takip etmeye bayılır, mırıltısıyla atölyeye neşe saçar.</div>
+                        <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Genel Neşe Kaynağı & Çay Dem Takipçisi</div>
+                        <div class="kedi-kunye-izgarasi">
+                            <div class="kedi-kunye-etiket">🪐 Karakter: <span>Oyuncu</span></div>
+                            <div class="kedi-kunye-etiket">🔥 Element: <span>Su</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="kediDetayModal" class="kedi-ic-modal-arka" onclick="kediGaleriModalDisKapat(event)">
+        <div class="kedi-ic-modal-pencere">
+            <span class="modal-kapat-btn" onclick="document.getElementById('kediDetayModal').style.display='none'" style="position: absolute; top: 15px; right: 20px; font-size: 2rem; color: #8c2d19; cursor: pointer; font-weight: bold;">&times;</span>
+            <h2 id="modalKediIsmi" style="color: #8c2d19; border-bottom: 3px double #5c4033; padding-bottom: 10px; margin-top: 0; font-family: 'Georgia', serif; font-weight: bold;">🗂️ Kedi Albümü</h2>
+            <div id="kediModalGaleriIcerik" class="modal-galeri-izgara"></div>
+        </div>
+    </div>
+
+    <div id="kediLightboxArkaPlan" class="kedi-lightbox-arka-plan">
+        <div class="kedi-lightbox-kapat-alani" onclick="kediLightboxKapat()"></div> 
+        <div class="kedi-lightbox-ok kedi-ok-sol" onclick="kediLightboxMedyasiniDegistir(-1); event.stopPropagation();">&#10094;</div>
+        <div class="kedi-lightbox-kapsayici">
+            <img id="kediLightboxGorselElemani" class="kedi-lightbox-icerik" src="" alt="Büyük Görsel" onclick="event.stopPropagation();">
+        </div>
+        <div class="kedi-lightbox-ok kedi-ok-sag" onclick="kediLightboxMedyasiniDegistir(1); event.stopPropagation();">&#10095;</div>
+    </div>
+
+    <div id="sazlarModal" class="ortak-modal">
+        <div class="modal-icerik">
+            <span class="kapat-butonu" onclick="sazlarModalKapat()">&times;</span>
+            
+            <div style="margin: 0 auto 30px auto; max-width: 200px; cursor: pointer;" onclick="kitapcikAc('kuslarana')">
+                <div class="sezon-saz-karti" style="border: 3px solid #d4af37; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);">
+                    <img src="/gorseller/kitapcik/kuslarana/1.png" class="saz-kart-resim">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 0 auto; max-width: 920px; padding: 10px;">    
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('hudhud')"><img src="/gorseller/kitapcik/sezon-saz1.jpg" class="saz-kart-resim"></div>
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('bulbul')"><img src="/gorseller/kitapcik/sezon-saz2.jpg" class="saz-kart-resim"></div>
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('dogan')"><img src="/gorseller/kitapcik/sezon-saz3.jpg" class="saz-kart-resim"></div>
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('baykus')"><img src="/gorseller/kitapcik/sezon-saz4.jpg" class="saz-kart-resim"></div>
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('alauveyik')"><img src="/gorseller/kitapcik/sezon-saz5.jpg" class="saz-kart-resim"></div>
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('huma')"><img src="/gorseller/kitapcik/sezon-saz6.jpg" class="saz-kart-resim"></div>
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('keklik')"><img src="/gorseller/kitapcik/sezon-saz7.jpg" class="saz-kart-resim"></div>
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('kumru')"><img src="/gorseller/kitapcik/sezon-saz8.jpg" class="saz-kart-resim"></div>
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('leylek')"><img src="/gorseller/kitapcik/sezon-saz9.jpg" class="saz-kart-resim"></div>
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('papagan')"><img src="/gorseller/kitapcik/sezon-saz10.jpg" class="saz-kart-resim"></div>
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('tavus')"><img src="/gorseller/kitapcik/sezon-saz11.jpg" class="saz-kart-resim"></div>
+                <div class="sezon-saz-karti" style="cursor: pointer;" onclick="kitapcikAc('turna')"><img src="/gorseller/kitapcik/sezon-saz12.jpg" class="saz-kart-resim"></div>
+            </div>
+            
+            <div class="magara-butonu" onclick="gizliModalAc()" title="Gizli Mağara">⛰️</div>
+        </div>
+    </div>
+
+    <div id="gizliSazModal" class="ortak-modal" style="z-index: 1100;"> 
+        <div class="modal-icerik" style="max-width: 380px; background: #170907; border: 3px double #d4af37; padding: 30px 20px 20px 20px;">
+            <span class="kapat-butonu" onclick="gizliModalKapat()">&times;</span>
+            <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px;">
+                <div class="sezon-saz-karti" style="width: 240px; transform: rotate(1deg) !important; border: 4px solid #d4af37; box-shadow: 0 0 25px rgba(212, 175, 55, 0.4); cursor: pointer;" onclick="kitapcikAc('kuyruksallayan')">
+                    <img src="/gorseller/gizli-saz.jpg" class="saz-kart-resim">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sazModal" class="ortak-modal">
+        <div class="modal-icerik" id="sazModalIcerik" style="max-width: 600px;"></div>
+    </div> 
+
+    <div id="guestbookModal" class="gb-modal">
+        <div class="gb-modal-content">
+            <span class="gb-close" id="closeBookBtn">&times;</span>
+            
+            <div class="museum-book-box" id="museumBook">
+                <button class="museum-lock-key" id="cleanerLoginBtn" title="Temizlikçi Girişi">🔑</button>
+
+                <div class="museum-page page-left-box">
+                    <div class="museum-lines-container" id="staticLeftLines"></div>
+                    <div class="page-number-display" id="pageNumberLeft"></div>
+                </div>
+            
+                <div class="flippable-page" id="flippablePage">
+                    <div class="page-face page-face-front">
+                        <div class="museum-lines-container" id="flipFrontLines"></div>
+                        <div class="page-number-display" id="pageNumberFrontRight"></div>
+                    </div>
+                    <div class="page-face page-face-back">
+                        <div class="museum-lines-container" id="flipBackLines"></div>
+                        <div class="page-number-display" id="pageNumberBackLeft"></div>
+                    </div>
+                </div>
+            
+                <div class="museum-page page-right-box">
+                    <div id="formPageContainer">
+                        <div class="museum-watermark">📜</div> 
+                        <h3 class="museum-title">Ziyaretçi Defteri</h3>
+                        <p class="museum-subtitle">Hissiyatınızı nakşedin...</p>
+                        
+                        <form class="papyrus-form" id="guestbookForm">
+                            <input type="text" id="nickname" placeholder="İsminiz veya Mahlasınız" required maxlength="30"
+                                style="font-family: 'Georgia', serif; font-style: italic; font-size: 0.85rem; letter-spacing: 0.5px; color: #5d4037; border-bottom: 1px solid rgba(141, 110, 99, 0.25);">
+                            
+                            <textarea id="note" rows="4" placeholder="Atölye günlüğüne bir not bırakın..." required maxlength="250"></textarea>
+                            
+                            <div class="page-preference" style="margin: 10px 0; text-align: left;">
+                                <label class="pref-checkbox" style="cursor: pointer; font-family: 'Georgia', serif; font-size: 0.78rem; font-style: italic; color: #725246; display: inline-flex; align-items: center; gap: 5px; user-select: none; white-space: nowrap;">
+                                    <input type="checkbox" id="forceNewPage" style="cursor: pointer; accent-color: #8d6e63; width: 13px; height: 13px; margin: 0;">
+                                    <span style="letter-spacing: 0.2px;">Yeni sayfa</span>
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="papyrus-btn">Deftere Nakşet</button>
+                        </form>
+                    </div> 
+                    
+                    <div class="museum-lines-container hidden" id="staticRightLines"></div>
+                    <div class="page-number-display" id="pageNumberRight"></div>
+                </div>
+            </div> <div class="book-navigation-bar">
+                <button class="nav-arrow-btn" id="prevPageBtn" type="button">◀ Önceki</button>
+                <button class="nav-arrow-btn" id="nextPageBtn" type="button">Sonraki ▶</button>
+            </div>
+            
+        </div> </div> <div id="adminModal" class="gb-modal admin-sub-modal">
+        <div class="gb-modal-content admin-content">
+            <span class="gb-admin-close" id="closeAdminBtn">&times;</span>
+            <h3 style="font-family: 'Georgia', serif; color: #4a2e1b; margin-top:0;">Atölye Panel</h3>
+            
+            <div id="adminAuth">
+                <input type="password" id="adminPassword" placeholder="Yönetici Şifresi" style="width:100%; padding:8px; margin-bottom:10px;">
+                <button id="adminLoginBtn" class="papyrus-btn">Giriş Yap</button>
+            </div>
+            
+            <div id="adminPanelList" class="admin-notes-list hidden"></div>
+        </div>
+    </div>
+<script>
+    window.dinamikHikayeDosyalari = [
+        {{ range readDir "static/gorseller/hikaye/yayin" }}
+            "{{ .Name }}",
+        {{ end }}
+    ];
+</script>
+
+{{ $atolyeJs := resources.Get "js/atolye.js" | minify }}
+<script src="{{ $atolyeJs.RelPermalink }}" defer></script>
+{{ $js := resources.Get "js/guestbook.js" | minify }}
+<script src="{{ $js.RelPermalink }}" defer></script>
+</body>
+</html>
