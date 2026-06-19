@@ -5,16 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ .Site.Title }}</title>
     
-    {{ $css := resources.Get "css/guestbook.css" | minify }}
-    <link rel="stylesheet" href="{{ $css.RelPermalink }}">
     {{ $styles := resources.Get "css/main.css" | minify | fingerprint }}
     <link rel="stylesheet" href="{{ $styles.RelPermalink }}">
-
 </head>
 <body>
-
-    <div class="site-kapsayici">
-        </div>
 
     <div class="site-kapsayici">
         <div class="kilim-border"></div>
@@ -108,25 +102,16 @@
                 <span class="filiz">🌸</span>
             </div>
         </main>
-    </div> <div class="gozcu-kedi-sol" id="kediButon" title="Kedi Günlüğünü Aç!">🐈</div>
+    </div> 
+
+    <div class="gozcu-kedi-sol" id="kediButon" title="Kedi Günlüğünü Aç!">🐈</div>
 
     <div class="kopek-konteyner" onmouseenter="usDusunceUret()">
         <div class="konusma-balonu" id="usBalon">...</div>
         <img src="/gorseller/kopek.png" class="kopek-resim" alt="Mahallenin Reisi Us">
     </div>
 
-    <div class="gb-wrapper-main">
-        <div class="guestbook-button-container">
-            <button id="openBookBtn" class="museum-book-btn" title="Atölye Ziyaretçi Defteri">
-                <div class="btn-cover"></div>
-                <div class="btn-pages"></div>
-                <span class="btn-text">📜 Defter</span>
-            </button>
-        </div>
-    </div>
-
     <audio id="globalKediOynatici" onended="kediSesSifirla()"></audio>
-
 
     <div id="atolyeModal" class="ortak-modal">
         <div class="modal-icerik">
@@ -195,7 +180,7 @@ Bir sanata kaç sarıldım kimbilir</p>
                             <div class="kedi-hover-medya"></div>
                         </div>
                         <h2 class="kedi-baslik">Efekan</h2>
-                        <div class="kedi-felsefe">Atölyenin en kıdemlisi. Gözlerini tezgahtan ayırmaz, her talaşın düşüş açısını büyük bir titizlikle inceler.</div>
+                        <div class="kedi-felsefe">Atölyemizin en kıdemli kedisidir. Sağı solu belli olmaz, tersi biraz pistir. Bahçe sulamaktan, arabayla dolaşmaktan ve poşet yakalamaktan çok hoşlanır.</div>
                         <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Baş Marangoz / Talaş Müfettişi</div>
                         <div class="kedi-kunye-izgarasi">
                             <div class="kedi-kunye-etiket">🪐 Karakter: <span>Sakin</span></div>
@@ -210,7 +195,7 @@ Bir sanata kaç sarıldım kimbilir</p>
                             <div class="kedi-hover-medya"></div>
                         </div>
                         <h2 class="kedi-baslik">Bedri</h2>
-                        <div class="kedi-felsefe">Tellerin frekansını kulaklarıyla takip eder. Miksaj esnasında monitörlerin tam üzerinde uyuyarak akort onaylar.</div>
+                        <div class="kedi-felsefe">Atölyemizin biraz serseri kedisidir. Her türlü yakalanabilecek şeyin peşinde koşar. Atölye tezgahı üzerindeki salıncakta uyumaktan çok hoşlanır.</div>
                         <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Stüdyo Akort Sorumlusu</div>
                         <div class="kedi-kunye-izgarasi">
                             <div class="kedi-kunye-etiket">🪐 Karakter: <span>Seçici</span></div>
@@ -225,7 +210,7 @@ Bir sanata kaç sarıldım kimbilir</p>
                             <div class="kedi-hover-medya"></div>
                         </div>
                         <h2 class="kedi-baslik">Bahri</h2>
-                        <div class="kedi-felsefe">6 aylık bu utangaç delikanlı, akan suların ve şelale tınılarının ritmine kapılıp derin düşüncelere dalar.</div>
+                        <div class="kedi-felsefe">Atölyemizin çekingen ve pek bir efendi kedisidir. Koşturmaz, genelde dışarıdan, sessiz ve sakin şekilde izler. Küşnepe saatlerinde çok heyecanlanır. Çiçeklerin yanındaki masada yatmaktan çok hoşlanır.</div>
                         <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Şelale ve Su Şırıltısı Muhtarı</div>
                         <div class="kedi-kunye-izgarasi">
                             <div class="kedi-kunye-etiket">🪐 Karakter: <span>Utangaç</span></div>
@@ -240,7 +225,7 @@ Bir sanata kaç sarıldım kimbilir</p>
                             <div class="kedi-hover-medya"></div>
                         </div>
                         <h2 class="kedi-baslik">Zerdali</h2>
-                        <div class="kedi-felsefe">Atölyenin yeşil yaprakları, Monstera ve Pathos sarmaşıkları ondan sorulur. Botanik bekçisidir.</div>
+                        <div class="kedi-felsefe">Atölyemizin sütlü sarı kedisidir. Çılgın ve çirkeftir. Sarı kedilik özelliklerini çok güzel yerine getirir. Yemek konusunda herkesi arkasında bırakabilir. Biraz gevezedir, ilgi görmekten hoşlanır.</div>
                         <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Bahçe Çiçek Koruyucusu</div>
                         <div class="kedi-kunye-izgarasi">
                             <div class="kedi-kunye-etiket">🪐 Karakter: <span>Meraklı</span></div>
@@ -255,7 +240,7 @@ Bir sanata kaç sarıldım kimbilir</p>
                             <div class="kedi-hover-medya"></div>
                         </div>
                         <h2 class="kedi-baslik">Tahin</h2>
-                        <div class="kedi-felsefe">Aramıza yeni katılan 2 aylık sarı fırtına. Jack kablolarını ve stüdyonun tüm düzenini kemirerek test eder.</div>
+                        <div class="kedi-felsefe">Kardeşi Pekmez ile birlikte atölyemizin en küçük boy kedisidir. Uykucudur, diğer kediler oyun oynarken Tahin genelde uyur. Yemekte sınır bilmez göbeği davul gibidir. Müziğin olduğu ortamlarda uyumaktan çok hoşlanır.</div>
                         <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Baş Tasi Yalayıcı & Kablo Kemirgeni</div>
                         <div class="kedi-kunye-izgarasi">
                             <div class="kedi-kunye-etiket">🪐 Karakter: <span>Yaramaz</span></div>
@@ -270,7 +255,7 @@ Bir sanata kaç sarıldım kimbilir</p>
                             <div class="kedi-hover-medya"></div>
                         </div>
                         <h2 class="kedi-baslik">Pekmez</h2>
-                        <div class="kedi-felsefe">Tahin'in kız kardeşi. Bardaktan çay demi takip etmeye bayılır, mırıltısıyla atölyeye neşe saçar.</div>
+                        <div class="kedi-felsefe">Kardeşi Tahin’e pek benzemez. Daha hareketli ve oyun peşindedir. Kardeşi uyurken bile onunla oynamaya devam eder. Yemek konusunda agresiftir, o yerken müdahele edilirse çirkinleşebilir. Müzikten çok hoşlanır, genelde müzik yaparken gelip kardeşiyle uyur.</div>
                         <div class="kedi-gorev-kutusu">🛠️ <strong>Atölye Rolü:</strong> Genel Neşe Kaynağı & Çay Dem Takipçisi</div>
                         <div class="kedi-kunye-izgarasi">
                             <div class="kedi-kunye-etiket">🪐 Karakter: <span>Oyuncu</span></div>
@@ -343,73 +328,6 @@ Bir sanata kaç sarıldım kimbilir</p>
         <div class="modal-icerik" id="sazModalIcerik" style="max-width: 600px;"></div>
     </div> 
 
-    <div id="guestbookModal" class="gb-modal">
-        <div class="gb-modal-content">
-            <span class="gb-close" id="closeBookBtn">&times;</span>
-            
-            <div class="museum-book-box" id="museumBook">
-                <button class="museum-lock-key" id="cleanerLoginBtn" title="Temizlikçi Girişi">🔑</button>
-
-                <div class="museum-page page-left-box">
-                    <div class="museum-lines-container" id="staticLeftLines"></div>
-                    <div class="page-number-display" id="pageNumberLeft"></div>
-                </div>
-            
-                <div class="flippable-page" id="flippablePage">
-                    <div class="page-face page-face-front">
-                        <div class="museum-lines-container" id="flipFrontLines"></div>
-                        <div class="page-number-display" id="pageNumberFrontRight"></div>
-                    </div>
-                    <div class="page-face page-face-back">
-                        <div class="museum-lines-container" id="flipBackLines"></div>
-                        <div class="page-number-display" id="pageNumberBackLeft"></div>
-                    </div>
-                </div>
-            
-                <div class="museum-page page-right-box">
-                    <div id="formPageContainer">
-                        <div class="museum-watermark">📜</div> 
-                        <h3 class="museum-title">Ziyaretçi Defteri</h3>
-                        <p class="museum-subtitle">Hissiyatınızı nakşedin...</p>
-                        
-                        <form class="papyrus-form" id="guestbookForm">
-                            <input type="text" id="nickname" placeholder="İsminiz veya Mahlasınız" required maxlength="30"
-                                style="font-family: 'Georgia', serif; font-style: italic; font-size: 0.85rem; letter-spacing: 0.5px; color: #5d4037; border-bottom: 1px solid rgba(141, 110, 99, 0.25);">
-                            
-                            <textarea id="note" rows="4" placeholder="Atölye günlüğüne bir not bırakın..." required maxlength="250"></textarea>
-                            
-                            <div class="page-preference" style="margin: 10px 0; text-align: left;">
-                                <label class="pref-checkbox" style="cursor: pointer; font-family: 'Georgia', serif; font-size: 0.78rem; font-style: italic; color: #725246; display: inline-flex; align-items: center; gap: 5px; user-select: none; white-space: nowrap;">
-                                    <input type="checkbox" id="forceNewPage" style="cursor: pointer; accent-color: #8d6e63; width: 13px; height: 13px; margin: 0;">
-                                    <span style="letter-spacing: 0.2px;">Yeni sayfa</span>
-                                </label>
-                            </div>
-                            
-                            <button type="submit" class="papyrus-btn">Deftere Nakşet</button>
-                        </form>
-                    </div> 
-                    
-                    <div class="museum-lines-container hidden" id="staticRightLines"></div>
-                    <div class="page-number-display" id="pageNumberRight"></div>
-                </div>
-            </div> <div class="book-navigation-bar">
-                <button class="nav-arrow-btn" id="prevPageBtn" type="button">◀ Önceki</button>
-                <button class="nav-arrow-btn" id="nextPageBtn" type="button">Sonraki ▶</button>
-            </div>
-            
-        </div> </div> <div id="adminModal" class="gb-modal admin-sub-modal">
-        <div class="gb-modal-content admin-content">
-            <span class="gb-admin-close" id="closeAdminBtn">&times;</span>
-            <h3 style="font-family: 'Georgia', serif; color: #4a2e1b; margin-top:0;">Atölye Panel</h3>
-            
-            <div id="adminAuth">
-                <input type="password" id="adminPassword" placeholder="Yönetici Şifresi" style="width:100%; padding:8px; margin-bottom:10px;">
-                <button id="adminLoginBtn" class="papyrus-btn">Giriş Yap</button>
-            </div>
-            
-            <div id="adminPanelList" class="admin-notes-list hidden"></div>
-        </div>
-    </div>
 <script>
     window.dinamikHikayeDosyalari = [
         {{ range readDir "static/gorseller/hikaye/yayin" }}
@@ -420,7 +338,5 @@ Bir sanata kaç sarıldım kimbilir</p>
 
 {{ $atolyeJs := resources.Get "js/atolye.js" | minify }}
 <script src="{{ $atolyeJs.RelPermalink }}" defer></script>
-{{ $js := resources.Get "js/guestbook.js" | minify }}
-<script src="{{ $js.RelPermalink }}" defer></script>
 </body>
 </html>

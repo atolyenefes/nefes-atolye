@@ -1,8 +1,13 @@
 // Atölye Ziyaretçi Defteri - Dinamik Sayfa Kırılımlı Gelişmiş Motor
 const ADMIN_PASSWORD = "1234"; // 🔑 Atölye Giriş Şifren
 
+// 🚀 SUPABASE BAĞLANTISI (YENİ)
+const supabaseUrl = 'https://mwrawwxqqdkqkurbpnod.supabase.co';
+const supabaseKey = 'sb_publishable_MNMl2Ifg6j-_2LltNpPk7g_OXMWGFCf';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
 let allNotes = [];
-let bookPages = [[]]; // Dinamik olarak hesaplanan sayfaların dizisi
+let bookPages = [[]];
 const notesPerPage = 4; 
 let currentSpread = 1;  
 let maxSpread = 1;
@@ -22,32 +27,47 @@ function fetchUserIP() {
         .catch(err => { currentUserIP = "127.0.0.1"; });
 }
 
-// 📦 LOKAL ARŞİV DEPOLAMA SİSTEMİ (Local Storage)
-function loadArchivedNotes() {
-    const localData = localStorage.getItem("nefes_atolye_notes");
-    if (localData) {
-        allNotes = JSON.parse(localData);
+// 📦 BULUT ARŞİV DEPOLAMA SİSTEMİ (Supabase) - GÜNCELLENDİ
+async function loadArchivedNotes() {
+    const { data, error } = await supabase
+        .from('ziyaretci_defteri')
+        .select('*')
+        .order('created_at', { ascending: true });
+
+    if (error) {
+        console.error("Buluttan veriler çekilirken hata oluştu:", error);
+        allNotes = [];
+    } else if (data && data.length > 0) {
+        allNotes = data.map(row => {
+            const dateObj = new Date(row.created_at);
+            const tarihMuhu = `${String(dateObj.getDate()).padStart(2, '0')}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${dateObj.getFullYear()}`;
+            
+            return {
+                id: row.id, 
+                nickname: row.nickname,
+                note: row.note,
+                date: tarihMuhu,
+                ip: row.ip_address,
+                forceNewPage: row.yeni_sayfa // <-- BURASI DÜZELTİLDİ
+            };
+        });
     } else {
-        // Örnek ilk veriler (forceNewPage parametresiyle birlikte)
-        allNotes = [
-            { nickname: "Yolcu", note: "Talaş kokusu kapıdan girer girmez insanı sarıyor. Müthiş bir dükkan.", date: "10.06.2026", ip: "192.168.1.10", forceNewPage: false },
-            { nickname: "Derviş", note: "432 Hz tınıları arasında handpan doğaçlaması ruhu dinlendiriyor.", date: "09.06.2026", ip: "85.105.42.12", forceNewPage: false },
-            { nickname: "Eski Dost", note: "Şelalenin sesiyle çay demlenirken zaman durdu sandım.", date: "08.06.2026", ip: "176.234.11.90", forceNewPage: true }, // Yeni sayfaya zorlanmış
-            { nickname: "Aşina", note: "Kedilerin huzuru atölyenin resmi kadrosu olduklarını kanıtlar nitelikte.", date: "07.06.2026", ip: "94.54.210.33", forceNewPage: false }
-        ];
-        localStorage.setItem("nefes_atolye_notes", JSON.stringify(allNotes));
+        allNotes = [];
     }
+
+    calculateBookLayout();
+    currentSpread = maxSpread; 
+    renderCurrentSpread();
 }
 
-// 📐 DİNAMİK SAYFA KIRILIM HESAPLAMA MOTORU
+// 📐 DİNAMİK SAYFA KIRILIM HESAPLAMA MOTORU (Orijinal)
 function calculateBookLayout() {
-    bookPages = [[]]; // Temizle ve ilk sayfayı aç
+    bookPages = [[]];
     let currentPageIndex = 0;
 
     allNotes.forEach((note) => {
-        // Koşul: Sayfa limiti (4) dolduysa VEYA ziyaretçi yeni sayfa istemişse (ve o anki sayfa boş değilse)
         if (bookPages[currentPageIndex].length >= notesPerPage || (note.forceNewPage && bookPages[currentPageIndex].length > 0)) {
-            bookPages.push([]); // Yeni bir sayfa matrisi oluştur
+            bookPages.push([]);
             currentPageIndex++;
         }
         bookPages[currentPageIndex].push(note);
@@ -58,7 +78,7 @@ function calculateBookLayout() {
     if (maxSpread < 1) maxSpread = 1;
 }
 
-// 📖 ÖNLÜ ARKALI SAYFA YAZDIRMA MOTORU
+// 📖 ÖNLÜ ARKALI SAYFA YAZDIRMA MOTORU (Orijinal)
 function renderCurrentSpread() {
     calculateBookLayout();
 
@@ -124,9 +144,9 @@ function turnPage(direction) {
     }
 }
 
-// ZİYARETÇİ NOT KAYDETME SİSTEMİ
+// ZİYARETÇİ NOT KAYDETME SİSTEMİ - GÜNCELLENDİ (async)
 if (guestbookForm) {
-    guestbookForm.addEventListener("submit", function(e) {
+    guestbookForm.addEventListener("submit", async function(e) {
         e.preventDefault();
         
         const nicknameInput = document.getElementById("nickname");
@@ -135,30 +155,44 @@ if (guestbookForm) {
 
         if (!nicknameInput.value.trim() || !noteInput.value.trim()) return;
 
-        const bugun = new Date();
-        const tarihMuhu = `${String(bugun.getDate()).padStart(2, '0')}.${String(bugun.getMonth() + 1).padStart(2, '0')}.${bugun.getFullYear()}`;
+        const isForceNewPage = forceNewPageCheckbox ? forceNewPageCheckbox.checked : false;
 
-        allNotes.push({
-            nickname: nicknameInput.value.trim(),
-            note: noteInput.value.trim(),
-            date: tarihMuhu,
-            ip: currentUserIP,
-            forceNewPage: forceNewPageCheckbox ? forceNewPageCheckbox.checked : false
-        });
-        
-        localStorage.setItem("nefes_atolye_notes", JSON.stringify(allNotes));
+        // Form gönderilirken butonu kilitleyebiliriz (opsiyonel ama sağlıklı)
+        const submitBtn = guestbookForm.querySelector("button[type='submit']");
+        if(submitBtn) submitBtn.disabled = true;
 
+        // Supabase'e gönder
+        const { data, error } = await supabase
+            .from('ziyaretci_defteri')
+            .insert([
+                {
+                    nickname: nicknameInput.value.trim(),
+                    note: noteInput.value.trim(),
+                    ip_address: currentUserIP,
+                    yeni_sayfa: isForceNewPage // <-- BURASI DÜZELTİLDİ
+                }
+            ])
+            .select();
+
+        if (error) {
+            alert("Atölye kayıt defterine yazarken bir hata oluştu. Lütfen tekrar dene.");
+            console.error("Insert Error:", error);
+            if(submitBtn) submitBtn.disabled = false;
+            return;
+        }
+
+        // Başarılıysa alanları temizle
         nicknameInput.value = "";
         noteInput.value = "";
         if (forceNewPageCheckbox) forceNewPageCheckbox.checked = false;
+        if(submitBtn) submitBtn.disabled = false;
 
-        calculateBookLayout();
-        currentSpread = maxSpread;
-        renderCurrentSpread();
+        // Yeni veriyi ekranda göstermek için buluttan listeyi tazele
+        await loadArchivedNotes();
     });
 }
 
-// 🛠 TEMİZLİKÇİ PANELİ MOTORU
+// 🛠 TEMİZLİKÇİ PANELİ MOTORU - GÜNCELLENDİ (Silme işlemi)
 function renderAdminPanelNotes() {
     if (!adminModal) return;
     
@@ -191,25 +225,36 @@ function renderAdminPanelNotes() {
                 <span style="color:#55af55; font-size:0.75rem; margin-right:5px;">${pageBadge}</span>
                 <strong>${note.nickname}:</strong> ${note.note}
             </div>
-            <button class="admin-del-btn" data-index="${originalIndex}" style="background:#b93a3a; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px; font-size:0.8rem; flex-shrink:0;">Sil</button>
+            <button class="admin-del-btn" data-id="${note.id}" style="background:#b93a3a; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px; font-size:0.8rem; flex-shrink:0;">Sil</button>
         `;
         adminContainer.appendChild(row);
     });
 
+    // Supabase'den Silme İşlemi
     adminContainer.querySelectorAll(".admin-del-btn").forEach(btn => {
-        btn.onclick = function() {
-            const idx = parseInt(this.getAttribute("data-index"));
+        btn.onclick = async function() {
+            const dbId = this.getAttribute("data-id");
             if (confirm("Bu fısıltıyı defterden kalıcı olarak silmek istediğine emin misin?")) {
-                allNotes.splice(idx, 1); 
-                localStorage.setItem("nefes_atolye_notes", JSON.stringify(allNotes)); 
-                renderCurrentSpread(); 
-                renderAdminPanelNotes(); 
+                
+                const { error } = await supabase
+                    .from('ziyaretci_defteri')
+                    .delete()
+                    .eq('id', dbId);
+
+                if (error) {
+                    alert("Silme işlemi başarısız oldu.");
+                    console.error("Delete Error:", error);
+                } else {
+                    // Başarılıysa listeyi tazele
+                    await loadArchivedNotes();
+                    renderAdminPanelNotes(); 
+                }
             }
         };
     });
 }
 
-// 🔐 ÇEKİRDEK OLAYLAR VE MODAL GEÇİTLERİ
+// 🔐 ÇEKİRDEK OLAYLAR VE MODAL GEÇİTLERİ (Orijinal)
 function setupCoreEvents() {
     const openBookBtn = document.querySelector(".museum-book-btn");
     const closeBookBtn = document.querySelector(".gb-close");
@@ -220,9 +265,8 @@ function setupCoreEvents() {
         openBookBtn.onclick = () => {
             guestbookModal.style.display = "block";
             document.body.style.overflow = "hidden";
-            calculateBookLayout();
-            currentSpread = maxSpread; 
-            renderCurrentSpread();
+            // Modal açıldığında verileri her ihtimale karşı yeniden yükleyebiliriz
+            loadArchivedNotes();
         };
     }
 
@@ -288,19 +332,15 @@ function setupCoreEvents() {
         if (loginBtn) { loginBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); verifyAndEnter(); }; }
     }
 
-    // Klasik Tıklama ile Sayfa Çevirme
     const prevBtn = document.getElementById("prevPageBtn");
     const nextBtn = document.getElementById("nextPageBtn");
     if (prevBtn) prevBtn.onclick = (e) => { e.stopPropagation(); turnPage("prev"); };
     if (nextBtn) nextBtn.onclick = (e) => { e.stopPropagation(); turnPage("next"); };
 
-    // ==========================================
-    // EKLENEN YENİ ÖZELLİK: MOBİL SWIPE (KAYDIRMA) VE KLAVYE DESTEĞİ
-    // ==========================================
+    // MOBİL SWIPE VE KLAVYE DESTEĞİ
     let touchStartX = 0;
     let touchEndX = 0;
     
-    // Yalnızca kitap modalı üzerindeki kaydırmaları yakalar
     if (guestbookModal) {
         guestbookModal.addEventListener('touchstart', e => {
             touchStartX = e.changedTouches[0].screenX;
@@ -308,13 +348,11 @@ function setupCoreEvents() {
 
         guestbookModal.addEventListener('touchend', e => {
             touchEndX = e.changedTouches[0].screenX;
-            // 50px'lik bir kaydırma eşiği belirliyoruz
-            if (touchEndX < touchStartX - 50) turnPage("next"); // Sola kaydır (Sonraki Sayfa)
-            if (touchEndX > touchStartX + 50) turnPage("prev"); // Sağa kaydır (Önceki Sayfa)
+            if (touchEndX < touchStartX - 50) turnPage("next");
+            if (touchEndX > touchStartX + 50) turnPage("prev");
         }, { passive: true });
     }
 
-    // Klavye Yön Tuşlarıyla Kitap Sayfası Çevirme
     document.addEventListener("keydown", function(e) {
         if (guestbookModal && guestbookModal.style.display === "block") {
             if (e.key === "ArrowLeft") turnPage("prev");
@@ -326,6 +364,6 @@ function setupCoreEvents() {
 // Başlatıcı
 document.addEventListener("DOMContentLoaded", () => {
     fetchUserIP(); 
-    loadArchivedNotes();
+    loadArchivedNotes(); // Sayfa yüklendiğinde verileri Supabase'den çek
     setupCoreEvents();
 });
